@@ -1,3 +1,29 @@
+// Phần này config ở Active Choices Reactive Parameter: rollback_version
+import jenkins.model.*
+import hudson.FilePath
+
+def backupPath
+if (project == 'frontend') {
+    backupPath = "/jenkins-deploy/fullstack/backups/frontend/"
+} else if (project == 'backend') {
+    backupPath = "/jenkins-deploy/fullstack/backups/backend/"
+} else {
+    return "Invalid project"
+}
+
+def node = Jenkins.getInstance().getNode(server)
+def remoteDir = new FilePath(node.getChannel(), backupPath)
+
+if (action == "rollback") {
+   def files = remoteDir.list()
+   def nameFile = files.collect { it.name }
+   return nameFile
+}
+
+
+
+// Script cicd //
+
 // REGISTRY
 REGISTRY_URL = 'registry.datnxdevops.site'
 REGISTRY_USER = 'admin'
